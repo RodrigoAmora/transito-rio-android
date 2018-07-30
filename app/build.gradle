@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
+    useLibrary 'org.apache.http.legacy'
+
     defaultConfig {
         applicationId "br.com.rodrigoamora.transitorio"
         minSdkVersion 21
@@ -10,18 +12,41 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "BASE_URL_ONIBUS_API", "\"http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/\""
         }
+
+        debug {
+            debuggable true
+            buildConfigField "String", "BASE_URL_ONIBUS_API", "\"http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/\""
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    //MATERIAL-DESIGN
+    def materialDesignVersion = '27.1.1'
+    implementation "com.android.support:appcompat-v7:$materialDesignVersion"
+    implementation "com.android.support:design:$materialDesignVersion"
+    implementation "com.android.support:cardview-v7:$materialDesignVersion"
+    implementation "com.android.support:recyclerview-v7:$materialDesignVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+
+    //GOOGLE-PLAY-SERVICES
+    def googlePlayServicesVersion = '15.0.1'
+    implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
+    implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
+
+
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
