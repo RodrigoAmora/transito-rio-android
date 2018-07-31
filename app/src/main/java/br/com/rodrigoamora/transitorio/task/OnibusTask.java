@@ -33,8 +33,8 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
     protected List<Onibus> doInBackground(Void... voids) {
         String url = BuildConfig.BASE_URL_ONIBUS_API+"obterTodasPosicoes";
         List<Onibus> onibusLista = new ArrayList();
-        HttpClient httpClient = new DefaultHttpClient();
         try {
+            HttpClient httpClient = new DefaultHttpClient();
             HttpGet get = new HttpGet(url);
             get.addHeader("accept", "application/xml");
 
