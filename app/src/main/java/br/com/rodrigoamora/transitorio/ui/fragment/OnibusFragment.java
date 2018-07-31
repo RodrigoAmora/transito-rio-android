@@ -37,7 +37,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_onbus, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_onibus, container, false);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         return rootView;
     }
