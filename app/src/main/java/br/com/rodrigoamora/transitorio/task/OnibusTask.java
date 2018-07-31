@@ -19,6 +19,7 @@ import java.util.Scanner;
 import br.com.rodrigoamora.transitorio.BuildConfig;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
 import br.com.rodrigoamora.transitorio.model.Onibus;
+import br.com.rodrigoamora.transitorio.util.TimeUtil;
 
 public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
 
@@ -53,15 +54,24 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONArray jsonOnibus = jsonArray.getJSONArray(i);
 
-                Onibus onibus = new Onibus();
-                onibus.setHora(jsonOnibus.get(0).toString());
-                onibus.setOrdem(jsonOnibus.get(1).toString());
-                onibus.setLinha(jsonOnibus.get(2).toString());
-                onibus.setLatidude(Double.parseDouble(jsonOnibus.get(3).toString()));
-                onibus.setLongitude(Double.parseDouble(jsonOnibus.get(4).toString()));
-                onibus.setVelocidade(Double.parseDouble(jsonOnibus.get(5).toString()));
+                String hora = jsonOnibus.get(0).toString().split(" ")[1];
+                if (TimeUtil.calculateTimeInMinutes(hora) <= 5) {
+                    Onibus onibus = new Onibus();
+                    onibus.setHora(hora);
+                    onibus.setOrdem(jsonOnibus.get(1).toString());
 
-                onibusLista.add(onibus);
+                    String linha = jsonOnibus.get(2).toString();
+                    if (linha.contains(".0")) {
+                        linha = linha.replace(".0", "");
+                    }
+                    onibus.setLinha(linha.toString());
+
+                    onibus.setLatidude(Double.parseDouble(jsonOnibus.get(3).toString()));
+                    onibus.setLongitude(Double.parseDouble(jsonOnibus.get(4).toString()));
+                    onibus.setVelocidade(Double.parseDouble(jsonOnibus.get(5).toString()));
+
+                    onibusLista.add(onibus);
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
