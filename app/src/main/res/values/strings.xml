@@ -1,5 +1,14 @@
 <resources>
-    <string name="app_name">Transito Rio</string>
+    <string name="app_name">Trânsito Rio</string>
 
     <string name="GOOGLE_API_KEY">AIzaSyD-X1N7caffFLprRVXK0NCn-681TzHAK7k</string>
+
+    <string name="alert_sem_onibus_proximo">Sem ônibus próximos!</string>
+    <string name="alert_gps_desativado">GPS desligado!</string>
+
+    <string name="aguarde">Aguarde</string>
+    <string name="carro">Carro:</string>
+    <string name="linha">Linha:</string>
+    <string name="numero_carro">Nº do carro:</string>
+    <string name="voce_esta_aqui">Você está aqui!</string>
 </resources>
