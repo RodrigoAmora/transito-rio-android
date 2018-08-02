@@ -47,6 +47,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     CardView cardViewProgressBar;
     FloatingActionButton fabLocation;
+    GoogleMap googleMap;
     SupportMapFragment mapFragment;
     MainActivity activity;
 
@@ -113,6 +114,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         if (onibusList != null && !onibusList.isEmpty()) {
+            this.googleMap = googleMap;
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -143,7 +145,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             LatLng latLng = new LatLng(-22.9076612, -43.1920286);
             CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
             googleMap.moveCamera(update);
-
             googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
         cardViewProgressBar.setVisibility(View.GONE);
@@ -157,10 +158,11 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     private void filtrarOnibusProximos() {
         if (!onibusList.isEmpty()) {
-            onibusList.clear();
             Location myLocation = getLocation(activity);
             if (myLocation != null) {
-                for (Onibus onibus : onibusList) {
+                List<Onibus> onibusProximos = new ArrayList();
+                for (int i = 0; i < onibusList.size(); i++) {
+                    Onibus onibus = onibusList.get(i);
                     Double lat = onibus.getLatidude();
                     Double lng = onibus.getLongitude();
 
@@ -170,24 +172,30 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
                     Float distance = 0f;
                     distance = myLocation.distanceTo(locationOption);
-                    if (distance <= 3500) {
-                        onibusList.add(onibus);
+                    if (distance <= 1500) {
+                        onibusProximos.add(onibus);
                     }
                 }
 
-                if (onibusList.isEmpty()) {
+                if (onibusProximos.isEmpty()) {
                     Toast.makeText(activity, getString(R.string.alert_sem_onibus_proximo), Toast.LENGTH_LONG).show();
                 } else {
+                    onibusList.clear();
+                    onibusList = onibusProximos;
+
                     LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
                     CircleOptions circleOptions = new CircleOptions();
                     circleOptions.center(latLng);
                     circleOptions.fillColor(R.color.colorPrimary);
-                    circleOptions.radius(3500.00);
+                    circleOptions.radius(1500);
                     circleOptions.strokeColor(Color.BLUE);
                     circleOptions.strokeWidth(2.0f);
+                    googleMap.addCircle(circleOptions);
 
                     MarkerOptions marker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
                     marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                    googleMap.addMarker(marker);
+
                     mapFragment.getMapAsync(this);
                 }
             }
@@ -200,7 +208,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
-            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (location != null) {
                 return location;
             }
