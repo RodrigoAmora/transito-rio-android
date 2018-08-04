@@ -74,7 +74,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (onibusTask != null && onibusTask.isCancelled()) {
+        if (onibusTask != null && !onibusTask.isCancelled()) {
             onibusTask.cancel(true);
         }
     }
