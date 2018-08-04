@@ -3,8 +3,9 @@
 
     <string name="GOOGLE_API_KEY">AIzaSyD-X1N7caffFLprRVXK0NCn-681TzHAK7k</string>
 
-    <string name="alert_sem_onibus_proximo">Sem ônibus próximos!</string>
     <string name="alert_gps_desativado">GPS desligado!</string>
+    <string name="alert_sem_internet">Sem internet!</string>
+    <string name="alert_sem_onibus_proximo">Sem ônibus próximos!</string>
 
     <string name="aguarde">Aguarde</string>
     <string name="carro">Carro:</string>

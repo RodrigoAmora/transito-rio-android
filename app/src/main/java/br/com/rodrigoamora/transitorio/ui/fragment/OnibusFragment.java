@@ -39,17 +39,18 @@ import br.com.rodrigoamora.transitorio.model.Onibus;
 import br.com.rodrigoamora.transitorio.task.OnibusTask;
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
 import br.com.rodrigoamora.transitorio.util.GPSUtil;
+import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
 public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
 
-    List<Onibus> onibusList;
-    OnibusTask onibusTask;
+    private List<Onibus> onibusList;
+    private OnibusTask onibusTask;
+    private MainActivity activity;
 
-    CardView cardViewProgressBar;
-    FloatingActionButton fabLocation, fabRefresh;
-    GoogleMap googleMap;
-    SupportMapFragment mapFragment;
-    MainActivity activity;
+    private CardView cardViewProgressBar;
+    private FloatingActionButton fabLocation, fabRefresh;
+    private GoogleMap googleMap;
+    private SupportMapFragment mapFragment;
 
     @Nullable
     @Override
@@ -158,9 +159,13 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void buscarOnibus() {
-        cardViewProgressBar.setVisibility(View.VISIBLE);
-        onibusTask = new OnibusTask(this);
-        onibusTask.execute();
+        if (NetworkUtil.checkConnection(activity)) {
+            cardViewProgressBar.setVisibility(View.VISIBLE);
+            onibusTask = new OnibusTask(this);
+            onibusTask.execute();
+        } else {
+            Toast.makeText(activity, getString(R.string.alert_sem_internet), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void filtrarOnibusProximos() {
