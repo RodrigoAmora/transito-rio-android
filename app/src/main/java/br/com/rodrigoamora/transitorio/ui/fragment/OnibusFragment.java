@@ -56,12 +56,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_onibus, container, false);
-        cardViewProgressBar = rootView.findViewById(R.id.progress_bar);
-        fabLocation = rootView.findViewById(R.id.fab_location);
-        fabLocation.setOnClickListener(this);
-        fabRefresh = rootView.findViewById(R.id.fab_list_all);
-        fabRefresh.setOnClickListener(this);
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        configurarComponentes(rootView);
         return rootView;
     }
 
@@ -114,8 +109,12 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     @Override
     public void success(List<Onibus> onibusList) {
-        this.onibusList = onibusList;
-        this.mapFragment.getMapAsync(this);
+        if (onibusList.isEmpty()) {
+            Toast.makeText(activity, getString(R.string.sem_resultado), Toast.LENGTH_LONG).show();
+        } else {
+            this.onibusList = onibusList;
+            this.mapFragment.getMapAsync(this);
+        }
     }
 
     @Override
@@ -151,11 +150,28 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             LatLng latLng = new LatLng(-22.9076612, -43.1920286);
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
+        centralizarMapa(update);
+    }
+
+    @SuppressLint("MissingPermission")
+    private void centralizarMapa(CameraUpdate update) {
         googleMap.moveCamera(update);
         googleMap.setMyLocationEnabled(false);
         googleMap.setBuildingsEnabled(false);
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         cardViewProgressBar.setVisibility(View.GONE);
+    }
+
+    private void configurarComponentes(View rootView) {
+        cardViewProgressBar = rootView.findViewById(R.id.progress_bar);
+
+        fabLocation = rootView.findViewById(R.id.fab_location);
+        fabLocation.setOnClickListener(this);
+
+        fabRefresh = rootView.findViewById(R.id.fab_list_all);
+        fabRefresh.setOnClickListener(this);
+
+        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
     }
 
     private void buscarOnibus() {
@@ -177,18 +193,18 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 if (onibusProximos.isEmpty()) {
                     Toast.makeText(activity, getString(R.string.alert_sem_onibus_proximo), Toast.LENGTH_LONG).show();
                 } else {
-                    onibusList.clear();
-                    onibusList = onibusProximos;
-                    desenharCirculoNoMapa(myLocation);
-                    mapFragment.getMapAsync(this);
+                    desenharCirculoNoMapa(myLocation, onibusProximos);
                 }
             }
         }
     }
 
-    private void desenharCirculoNoMapa(Location myLocation) {
+    private void desenharCirculoNoMapa(Location myLocation, List<Onibus> onibusProximos) {
         googleMap.clear();
-        
+
+        onibusList.clear();
+        onibusList = onibusProximos;
+
         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
@@ -201,6 +217,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         MarkerOptions marker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
         marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         googleMap.addMarker(marker);
+
+        mapFragment.getMapAsync(this);
     }
 
     private void verificarOnibusProximos(Location myLocation, List<Onibus> onibusProximos) {

@@ -11,5 +11,6 @@
     <string name="carro">Carro:</string>
     <string name="linha">Linha:</string>
     <string name="numero_carro">Nº do carro:</string>
+    <string name="sem_resultado">Sem resultado!</string>
     <string name="voce_esta_aqui">Você está aqui!</string>
 </resources>
