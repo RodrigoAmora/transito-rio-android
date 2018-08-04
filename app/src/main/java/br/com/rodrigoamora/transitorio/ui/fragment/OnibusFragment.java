@@ -70,6 +70,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (onibusTask != null && onibusTask.isCancelled()) {
+            onibusTask.cancel(true);
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         int viewId = v.getId();
         switch (viewId) {
@@ -161,43 +169,48 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             Location myLocation = getLocation(activity);
             if (myLocation != null) {
                 List<Onibus> onibusProximos = new ArrayList();
-                for (int i = 0; i < onibusList.size(); i++) {
-                    Onibus onibus = onibusList.get(i);
-                    Double lat = onibus.getLatidude();
-                    Double lng = onibus.getLongitude();
-
-                    Location locationOption = new Location(Context.LOCATION_SERVICE);
-                    locationOption.setLatitude(lat);
-                    locationOption.setLongitude(lng);
-
-                    Float distance = 0f;
-                    distance = myLocation.distanceTo(locationOption);
-                    if (distance <= 1500) {
-                        onibusProximos.add(onibus);
-                    }
-                }
-
+                verificarOnibusProximos(myLocation, onibusProximos);
                 if (onibusProximos.isEmpty()) {
                     Toast.makeText(activity, getString(R.string.alert_sem_onibus_proximo), Toast.LENGTH_LONG).show();
                 } else {
                     onibusList.clear();
                     onibusList = onibusProximos;
-
-                    LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-                    CircleOptions circleOptions = new CircleOptions();
-                    circleOptions.center(latLng);
-                    circleOptions.fillColor(R.color.colorPrimary);
-                    circleOptions.radius(1500);
-                    circleOptions.strokeColor(Color.BLUE);
-                    circleOptions.strokeWidth(2.0f);
-                    googleMap.addCircle(circleOptions);
-
-                    MarkerOptions marker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
-                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                    googleMap.addMarker(marker);
-
+                    desenharCirculoNoMapa(myLocation);
                     mapFragment.getMapAsync(this);
                 }
+            }
+        }
+    }
+
+    private void desenharCirculoNoMapa(Location myLocation) {
+        LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.center(latLng);
+        circleOptions.fillColor(R.color.colorPrimary);
+        circleOptions.radius(1500);
+        circleOptions.strokeColor(Color.BLUE);
+        circleOptions.strokeWidth(2.0f);
+        googleMap.addCircle(circleOptions);
+
+        MarkerOptions marker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
+        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        googleMap.addMarker(marker);
+    }
+
+    private List<Onibus> verificarOnibusProximos(Location myLocation, List<Onibus> onibusProximos) {
+        for (int i = 0; i < onibusList.size(); i++) {
+            Onibus onibus = onibusList.get(i);
+            Double lat = onibus.getLatidude();
+            Double lng = onibus.getLongitude();
+
+            Location locationOption = new Location(Context.LOCATION_SERVICE);
+            locationOption.setLatitude(lat);
+            locationOption.setLongitude(lng);
+
+            Float distance = 0f;
+            distance = myLocation.distanceTo(locationOption);
+            if (distance <= 1500) {
+                onibusProximos.add(onibus);
             }
         }
     }
