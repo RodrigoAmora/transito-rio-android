@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -46,7 +46,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     OnibusTask onibusTask;
 
     CardView cardViewProgressBar;
-    FloatingActionButton fabLocation;
+    FloatingActionButton fabLocation, fabRefresh;
     GoogleMap googleMap;
     SupportMapFragment mapFragment;
     MainActivity activity;
@@ -58,6 +58,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         cardViewProgressBar = rootView.findViewById(R.id.progress_bar);
         fabLocation = rootView.findViewById(R.id.fab_location);
         fabLocation.setOnClickListener(this);
+        fabRefresh = rootView.findViewById(R.id.fab_list_all);
+        fabRefresh.setOnClickListener(this);
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
         return rootView;
     }
@@ -84,28 +86,24 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             case R.id.fab_location:
                 filtrarOnibusProximos();
                 break;
+
+            case R.id.fab_list_all:
+                buscarOnibus();
+                break;
         }
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-
-    }
+    public void onLocationChanged(Location location) {}
 
     @Override
-    public void onStatusChanged(String provider, int status, Bundle extras) {
-
-    }
+    public void onStatusChanged(String provider, int status, Bundle extras) {}
 
     @Override
-    public void onProviderEnabled(String provider) {
-
-    }
+    public void onProviderEnabled(String provider) {}
 
     @Override
-    public void onProviderDisabled(String provider) {
-
-    }
+    public void onProviderDisabled(String provider) {}
 
     @Override
     public void error() {
@@ -121,6 +119,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+        CameraUpdate update;
         if (onibusList != null && !onibusList.isEmpty()) {
             this.googleMap = googleMap;
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -146,15 +145,15 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
             int size = onibusList.size();
             LatLng latLng = new LatLng(onibusList.get(size-1).getLatidude(), onibusList.get(size - 1).getLongitude());
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-            googleMap.moveCamera(update);
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         } else {
             LatLng latLng = new LatLng(-22.9076612, -43.1920286);
-            CameraUpdate update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
-            googleMap.moveCamera(update);
-            googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
+        googleMap.moveCamera(update);
+        googleMap.setMyLocationEnabled(false);
+        googleMap.setBuildingsEnabled(false);
+        googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         cardViewProgressBar.setVisibility(View.GONE);
     }
 
@@ -197,7 +196,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         googleMap.addMarker(marker);
     }
 
-    private List<Onibus> verificarOnibusProximos(Location myLocation, List<Onibus> onibusProximos) {
+    private void verificarOnibusProximos(Location myLocation, List<Onibus> onibusProximos) {
         for (int i = 0; i < onibusList.size(); i++) {
             Onibus onibus = onibusList.get(i);
             Double lat = onibus.getLatidude();
