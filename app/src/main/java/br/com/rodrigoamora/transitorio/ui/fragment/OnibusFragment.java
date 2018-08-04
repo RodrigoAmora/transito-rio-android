@@ -135,10 +135,10 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             }
             googleMap.setMyLocationEnabled(true);
 
-            for (Onibus machineShop : onibusList) {
-                LatLng latLng = new LatLng(machineShop.getLatidude(), machineShop.getLongitude());
+            for (Onibus onibus : onibusList) {
+                LatLng latLng = new LatLng(onibus.getLatidude(), onibus.getLongitude());
                 googleMap.addMarker(new MarkerOptions()
-                        .title(machineShop.getLinha()+" - "+machineShop.getOrdem())
+                        .title(onibus.getLinha()+" - "+onibus.getOrdem())
                         //.snippet(getArguments().getString("desc"))
                         .position(latLng));
                 //googleMap.setInfoWindowAdapter(new InfoWindowCustom(getActivity(), machineShop));
@@ -187,6 +187,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void desenharCirculoNoMapa(Location myLocation) {
+        googleMap.clear();
+        
         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
