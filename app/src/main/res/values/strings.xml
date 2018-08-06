@@ -12,8 +12,14 @@
     <string name="aguarde">Aguarde</string>
     <string name="buscar_pela_linha">Buscar linha de ônibus...</string>
     <string name="carro">Carro:</string>
+    <string name="created_by_rodrigo_amora">Criado por ROdrigo Amora</string>
+    <string name="email">Email:</string>
     <string name="linha">Linha:</string>
+    <string name="meu_email">rorigo.amora.freitas@gmail.com</string>
+    <string name="meu_site">www.rodrigoamora.com.br</string>
     <string name="numero_carro">Nº do carro:</string>
     <string name="sem_resultado">Sem resultado!</string>
+    <string name="site">Site:</string>
+    <string name="versao">Versão:</string>
     <string name="voce_esta_aqui">Você está aqui!</string>
 </resources>

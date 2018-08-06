@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,17 +14,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import android.location.LocationListener;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,7 +41,7 @@ import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
 import br.com.rodrigoamora.transitorio.util.GPSUtil;
 import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
-public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
 
     private List<Onibus> onibusList;
     private OnibusTask onibusTask;
@@ -77,18 +73,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         if (onibusTask != null && !onibusTask.isCancelled()) {
             onibusTask.cancel(true);
         }
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.onibus, menu);
-
-        android.support.v7.widget.SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-        mSearchView.setQueryHint(getString(R.string.buscar_pela_linha));
-        mSearchView.setOnCloseListener(this);
-        mSearchView.setOnQueryTextListener(this);
-
-        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -169,27 +153,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         centralizarMapa(update);
     }
 
-    @Override
-    public boolean onClose() {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        for (Onibus onibus : onibusList) {
-            if (!onibus.getLinha().equalsIgnoreCase(query) && !onibus.getLinha().contains(query)) {
-                onibusList.remove(onibus);
-            }
-        }
-        mapFragment.getMapAsync(this);
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
-
     @SuppressLint("MissingPermission")
     private void centralizarMapa(CameraUpdate update) {
         googleMap.moveCamera(update);
@@ -213,6 +176,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     private void buscarOnibus() {
         if (NetworkUtil.checkConnection(activity)) {
+            limparMapa();
             cardViewProgressBar.setVisibility(View.VISIBLE);
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
@@ -237,7 +201,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void desenharCirculoNoMapa(Location myLocation, List<Onibus> onibusProximos) {
-        googleMap.clear();
+        limparMapa();
 
         onibusList.clear();
         onibusList = onibusProximos;
@@ -292,6 +256,10 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
         Toast.makeText(context, getString(R.string.alert_gps_desativado), Toast.LENGTH_LONG).show();
         return null;
+    }
+
+    private void limparMapa() {
+        googleMap.clear();
     }
 
 }
