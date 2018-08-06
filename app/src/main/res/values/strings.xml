@@ -3,11 +3,14 @@
 
     <string name="GOOGLE_API_KEY">AIzaSyD-X1N7caffFLprRVXK0NCn-681TzHAK7k</string>
 
+    <string name="action_about">Sobre</string>
+
     <string name="alert_gps_desativado">GPS desligado!</string>
     <string name="alert_sem_internet">Sem internet!</string>
     <string name="alert_sem_onibus_proximo">Sem ônibus próximos!</string>
 
     <string name="aguarde">Aguarde</string>
+    <string name="buscar_pela_linha">Buscar linha de ônibus...</string>
     <string name="carro">Carro:</string>
     <string name="linha">Linha:</string>
     <string name="numero_carro">Nº do carro:</string>

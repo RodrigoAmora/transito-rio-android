@@ -13,8 +13,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -41,7 +45,7 @@ import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
 import br.com.rodrigoamora.transitorio.util.GPSUtil;
 import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
-public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
+public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener, SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private List<Onibus> onibusList;
     private OnibusTask onibusTask;
@@ -73,6 +77,18 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         if (onibusTask != null && !onibusTask.isCancelled()) {
             onibusTask.cancel(true);
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.onibus, menu);
+
+        android.support.v7.widget.SearchView mSearchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        mSearchView.setQueryHint(getString(R.string.buscar_pela_linha));
+        mSearchView.setOnCloseListener(this);
+        mSearchView.setOnQueryTextListener(this);
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
@@ -151,6 +167,27 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
         centralizarMapa(update);
+    }
+
+    @Override
+    public boolean onClose() {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        for (Onibus onibus : onibusList) {
+            if (!onibus.getLinha().equalsIgnoreCase(query) && !onibus.getLinha().contains(query)) {
+                onibusList.remove(onibus);
+            }
+        }
+        mapFragment.getMapAsync(this);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 
     @SuppressLint("MissingPermission")
