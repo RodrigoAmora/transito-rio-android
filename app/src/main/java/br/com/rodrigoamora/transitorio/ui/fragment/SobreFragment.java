@@ -17,7 +17,7 @@ public class SobreFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_onibus, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_sobre, container, false);
         configurarComponentes(rootView);
         return rootView;
     }

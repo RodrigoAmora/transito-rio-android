@@ -84,6 +84,9 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 break;
 
             case R.id.fab_list_all:
+                if (googleMap != null) {
+                    limparMapa();
+                }
                 buscarOnibus();
                 break;
         }
@@ -176,7 +179,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     private void buscarOnibus() {
         if (NetworkUtil.checkConnection(activity)) {
-            limparMapa();
             cardViewProgressBar.setVisibility(View.VISIBLE);
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
