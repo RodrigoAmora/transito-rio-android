@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeFragment(Fragment fragment, Bundle bundle) {
-        FragmentUtil.changeFragment(R.id.conatiner, new OnibusFragment(), getSupportFragmentManager(), false, null);
+        FragmentUtil.changeFragment(R.id.conatiner, fragment, getSupportFragmentManager(), false, bundle);
     }
 
 }
