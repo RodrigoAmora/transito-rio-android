@@ -12,13 +12,13 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -113,7 +113,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void success(List<Onibus> onibusList) {
         if (onibusList.isEmpty()) {
-            Toast.makeText(activity, getString(R.string.sem_resultado), Toast.LENGTH_LONG).show();
+            showSnackBar(getString(R.string.sem_resultado));
         } else {
             this.onibusList = onibusList;
             this.mapFragment.getMapAsync(this);
@@ -183,7 +183,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
         } else {
-            Toast.makeText(activity, getString(R.string.alert_sem_internet), Toast.LENGTH_LONG).show();
+            showSnackBar(getString(R.string.alert_sem_internet));
         }
     }
 
@@ -194,7 +194,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 List<Onibus> onibusProximos = new ArrayList();
                 verificarOnibusProximos(myLocation, onibusProximos);
                 if (onibusProximos.isEmpty()) {
-                    Toast.makeText(activity, getString(R.string.alert_sem_onibus_proximo), Toast.LENGTH_LONG).show();
+                    showSnackBar(getString(R.string.alert_sem_onibus_proximo));
                 } else {
                     desenharCirculoNoMapa(myLocation, onibusProximos);
                 }
@@ -256,12 +256,16 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             return null;
         }
 
-        Toast.makeText(context, getString(R.string.alert_gps_desativado), Toast.LENGTH_LONG).show();
+        showSnackBar(getString(R.string.alert_gps_desativado));
         return null;
     }
 
     private void limparMapa() {
         googleMap.clear();
+    }
+
+    private void showSnackBar(String text) {
+        Snackbar.make(fabLocation, text, Snackbar.LENGTH_LONG).show();
     }
 
 }
