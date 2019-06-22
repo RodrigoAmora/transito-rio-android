@@ -1,25 +1,25 @@
 <resources>
-    <string name="app_name">Trânsito Rio</string>
+    <string name="app_name">Transit Rio</string>
 
     <string name="GOOGLE_API_KEY">AIzaSyD-X1N7caffFLprRVXK0NCn-681TzHAK7k</string>
 
-    <string name="action_about">Sobre</string>
+    <string name="action_about">About</string>
 
-    <string name="alert_gps_desativado">GPS desligado!</string>
-    <string name="alert_sem_internet">Sem internet!</string>
-    <string name="alert_sem_onibus_proximo">Sem ônibus próximos!</string>
+    <string name="alert_gps_desativado">GPS disabled!</string>
+    <string name="alert_sem_internet">No internet!</string>
+    <string name="alert_sem_onibus_proximo">No nearby bus!</string>
 
     <string name="aguarde">Aguarde</string>
-    <string name="buscar_pela_linha">Buscar linha de ônibus...</string>
-    <string name="carro">Carro:</string>
-    <string name="created_by_rodrigo_amora">Criado por Rodrigo Amora</string>
-    <string name="email">Email:</string>
-    <string name="linha">Linha:</string>
+    <string name="buscar_pela_linha">Search bus line...</string>
+    <string name="carro">Car:</string>
+    <string name="created_by_rodrigo_amora">Created by Rodrigo Amora</string>
+    <string name="email">E-mail:</string>
+    <string name="linha">Line:</string>
     <string name="meu_email">rorigo.amora.freitas@gmail.com</string>
     <string name="meu_site">www.rodrigoamora.com.br</string>
-    <string name="numero_carro">Nº do carro:</string>
-    <string name="sem_resultado">Sem resultado!</string>
+    <string name="numero_carro">Number of car:</string>
+    <string name="sem_resultado">No result!</string>
     <string name="site">Site:</string>
-    <string name="versao">Versão:</string>
-    <string name="voce_esta_aqui">Você está aqui!</string>
+    <string name="versao">Version:</string>
+    <string name="voce_esta_aqui">You\'re here!</string>
 </resources>
