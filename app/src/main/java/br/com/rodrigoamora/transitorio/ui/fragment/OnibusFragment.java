@@ -141,9 +141,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 LatLng latLng = new LatLng(onibus.getLatidude(), onibus.getLongitude());
                 googleMap.addMarker(new MarkerOptions()
                         .title(onibus.getLinha()+" - "+onibus.getOrdem())
-                        //.snippet(getArguments().getString("desc"))
                         .position(latLng));
-                //googleMap.setInfoWindowAdapter(new InfoWindowCustom(getActivity(), machineShop));
             }
 
             int size = onibusList.size();
