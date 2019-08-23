@@ -7,7 +7,7 @@
     tools:context=".ui.activity.MainActivity">
 
     <FrameLayout
-        android:id="@+id/conatiner"
+        android:id="@+id/container"
         android:name="br.com.testeandroid.fragment.ShotFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
