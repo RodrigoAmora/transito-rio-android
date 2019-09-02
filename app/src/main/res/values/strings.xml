@@ -9,7 +9,7 @@
     <string name="alert_sem_internet">No internet!</string>
     <string name="alert_sem_onibus_proximo">No nearby bus!</string>
 
-    <string name="aguarde">Aguarde</string>
+    <string name="aguarde">Wait</string>
     <string name="buscar_pela_linha">Search bus line...</string>
     <string name="carro">Car:</string>
     <string name="created_by_rodrigo_amora">Created by Rodrigo Amora</string>
