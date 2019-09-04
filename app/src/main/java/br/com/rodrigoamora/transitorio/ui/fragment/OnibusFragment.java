@@ -185,8 +185,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void buscarOnibus() {
-        boolean b = NetworkUtil.checkConnection(activity);
-        if (!b) {
+        if (NetworkUtil.checkConnection(activity)) {
             cardViewProgressBar.setVisibility(View.VISIBLE);
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
