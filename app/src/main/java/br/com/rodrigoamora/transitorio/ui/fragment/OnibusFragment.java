@@ -16,6 +16,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,7 @@ import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
 
     private String TAG_CACHE = "onibus_list";
+    private String TAG_LOG = "TRANSITO_RIO";
 
     private List<Onibus> onibusList;
     private OnibusTask onibusTask;
@@ -119,7 +121,9 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     public void success(List<Onibus> onibusList) {
         if (onibusList.isEmpty()) {
             showSnackBar(getString(R.string.sem_resultado));
+            Log.i(TAG_LOG, "Sem resultado");
         } else {
+            Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
             this.onibusList = onibusList;
             this.myApplication.getCacheManager().deleteCache(TAG_CACHE);
             this.myApplication.getCacheManager().saveCache(TAG_CACHE, this.onibusList);
@@ -183,11 +187,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void buscarOnibus() {
+        Log.i(TAG_LOG, "Verificando se tem internet....");
         if (NetworkUtil.checkConnection(activity)) {
+            Log.e(TAG_LOG, "Tem internet....");
             cardViewProgressBar.setVisibility(View.VISIBLE);
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
         } else {
+            Log.i(TAG_LOG, "Nao tem internet....");
             showSnackBar(getString(R.string.alert_sem_internet));
             this.onibusList = (List<Onibus>) myApplication.getCacheManager().getCache(TAG_CACHE);
             this.mapFragment.getMapAsync(this);
@@ -195,14 +202,17 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void filtrarOnibusProximos() {
+        Log.i(TAG_LOG, "Filtrando onibus proximos....");
         if (!onibusList.isEmpty()) {
             Location myLocation = getLocation(activity);
             if (myLocation != null) {
                 List<Onibus> onibusProximos = new ArrayList();
                 verificarOnibusProximos(myLocation, onibusProximos);
                 if (onibusProximos.isEmpty()) {
+                    Log.i(TAG_LOG, "Sem onibus proximos");
                     showSnackBar(getString(R.string.alert_sem_onibus_proximo));
                 } else {
+                    Log.i(TAG_LOG, "Total de onibus proximos: "+onibusProximos.size());
                     desenharCirculoNoMapa(myLocation, onibusProximos);
                 }
             }
@@ -210,6 +220,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void desenharCirculoNoMapa(Location myLocation, List<Onibus> onibusProximos) {
+        Log.i(TAG_LOG, "Limpando mapa....");
         limparMapa();
 
         onibusList.clear();
