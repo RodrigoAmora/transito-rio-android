@@ -2,9 +2,11 @@ package br.com.rodrigoamora.transitorio.application;
 
 import android.app.Application;
 
-import com.orhanobut.hawk.Hawk;
+import br.com.rodrigoamora.transitorio.manager.CacheManager;
 
 public class MyApplication extends Application {
+
+    private CacheManager cacheManager;
 
     @Override
     public void onCreate() {
@@ -13,6 +15,10 @@ public class MyApplication extends Application {
     }
 
     private void initiateHawk() {
-        Hawk.init(this).build();
+        cacheManager = new CacheManager(this);
+    }
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 }

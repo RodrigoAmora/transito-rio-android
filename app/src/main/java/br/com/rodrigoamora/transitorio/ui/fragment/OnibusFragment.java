@@ -36,7 +36,6 @@ import java.util.List;
 import br.com.rodrigoamora.transitorio.R;
 import br.com.rodrigoamora.transitorio.application.MyApplication;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
-import br.com.rodrigoamora.transitorio.manager.CacheManager;
 import br.com.rodrigoamora.transitorio.model.Onibus;
 import br.com.rodrigoamora.transitorio.task.OnibusTask;
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
@@ -44,6 +43,8 @@ import br.com.rodrigoamora.transitorio.util.GPSUtil;
 import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
 public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
+
+    private String TAG_CACHE = "onibus_list";
 
     private List<Onibus> onibusList;
     private OnibusTask onibusTask;
@@ -55,8 +56,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private FloatingActionButton fabLocation, fabRefresh;
     private GoogleMap googleMap;
     private SupportMapFragment mapFragment;
-
-    CacheManager<List<Onibus>> cacheManager;
 
     @Nullable
     @Override
@@ -71,7 +70,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
         myApplication = (MyApplication) activity.getApplication();
-        cacheManager = new CacheManager<List<Onibus>>();
         buscarOnibus();
     }
 
@@ -123,8 +121,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             showSnackBar(getString(R.string.sem_resultado));
         } else {
             this.onibusList = onibusList;
-            cacheManager.deleteCache("onibus_list");
-            cacheManager.saveCache("onibus_list", this.onibusList);
+            this.myApplication.getCacheManager().deleteCache(TAG_CACHE);
+            this.myApplication.getCacheManager().saveCache(TAG_CACHE, this.onibusList);
             this.mapFragment.getMapAsync(this);
         }
     }
@@ -191,7 +189,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             onibusTask.execute();
         } else {
             showSnackBar(getString(R.string.alert_sem_internet));
-            this.onibusList = cacheManager.getCache("onibus_list");
+            this.onibusList = (List<Onibus>) myApplication.getCacheManager().getCache(TAG_CACHE);
             this.mapFragment.getMapAsync(this);
         }
     }
