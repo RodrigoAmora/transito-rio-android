@@ -138,6 +138,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         CameraUpdate update;
+        
         if (onibusList != null && !onibusList.isEmpty()) {
             this.googleMap = googleMap;
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -166,6 +167,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             LatLng latLng = new LatLng(-22.9076612, -43.1920286);
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
+
         centralizarMapa(update);
     }
 
