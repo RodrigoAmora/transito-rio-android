@@ -8,8 +8,8 @@ android {
         applicationId "br.com.rodrigoamora.transitorio"
         minSdkVersion 21
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.4.1"
+        versionCode 14
+        versionName "1.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
