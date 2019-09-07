@@ -3,7 +3,7 @@ package br.com.rodrigoamora.transitorio.manager;
 import com.orhanobut.hawk.Hawk;
 
 public class CacheManager<T> {
-    
+
     public T getCache(String key) {
         return Hawk.get(key);
     }
