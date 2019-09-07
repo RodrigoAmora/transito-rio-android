@@ -1,15 +1,9 @@
 package br.com.rodrigoamora.transitorio.manager;
 
-import android.content.Context;
-
 import com.orhanobut.hawk.Hawk;
 
 public class CacheManager<T> {
-
-    public CacheManager(Context context) {
-        Hawk.init(context).build();
-    }
-
+    
     public T getCache(String key) {
         return Hawk.get(key);
     }

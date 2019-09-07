@@ -37,6 +37,7 @@ import java.util.List;
 import br.com.rodrigoamora.transitorio.R;
 import br.com.rodrigoamora.transitorio.application.MyApplication;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
+import br.com.rodrigoamora.transitorio.manager.CacheManager;
 import br.com.rodrigoamora.transitorio.model.Onibus;
 import br.com.rodrigoamora.transitorio.task.OnibusTask;
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
@@ -59,6 +60,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private GoogleMap googleMap;
     private SupportMapFragment mapFragment;
 
+    private CacheManager<List<Onibus>> cacheManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -72,6 +75,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
         myApplication = (MyApplication) activity.getApplication();
+        cacheManager = new CacheManager<>();
         buscarOnibus();
     }
 
@@ -123,10 +127,10 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             showSnackBar(getString(R.string.sem_resultado));
             Log.i(TAG_LOG, "Sem resultado");
         } else {
-            Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
             this.onibusList = onibusList;
-            this.myApplication.getCacheManager().deleteCache(TAG_CACHE);
-            this.myApplication.getCacheManager().saveCache(TAG_CACHE, this.onibusList);
+            Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
+            this.cacheManager.deleteCache(TAG_CACHE);
+            this.cacheManager.saveCache(TAG_CACHE, this.onibusList);
             this.mapFragment.getMapAsync(this);
         }
     }
@@ -196,7 +200,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         } else {
             Log.i(TAG_LOG, "Nao tem internet....");
             showSnackBar(getString(R.string.alert_sem_internet));
-            this.onibusList = (List<Onibus>) myApplication.getCacheManager().getCache(TAG_CACHE);
+            this.onibusList = (List<Onibus>) this.cacheManager.getCache(TAG_CACHE);
             this.mapFragment.getMapAsync(this);
         }
     }
