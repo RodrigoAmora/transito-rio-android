@@ -26,5 +26,4 @@ public class SobreFragment extends Fragment {
         TextView version = rootView.findViewById(R.id.version);
         version.setText(PackageInfoUtil.getVersionName(getActivity()));
     }
-
 }

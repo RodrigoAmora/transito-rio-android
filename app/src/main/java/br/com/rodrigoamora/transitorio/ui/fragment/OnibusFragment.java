@@ -214,11 +214,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     private void filtrarOnibusProximos() {
         Log.i(TAG_LOG, "Filtrando onibus proximos....");
+
         if (!onibusList.isEmpty()) {
             Location myLocation = getLocation(activity);
+
             if (myLocation != null) {
                 List<Onibus> onibusProximos = new ArrayList();
                 verificarOnibusProximos(myLocation, onibusProximos);
+
                 if (onibusProximos.isEmpty()) {
                     Log.i(TAG_LOG, "Sem onibus proximos");
                     showSnackBar(getString(R.string.alert_sem_onibus_proximo));
@@ -286,6 +289,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         }
 
         showSnackBar(getString(R.string.alert_gps_desativado));
+
         return null;
     }
 
@@ -296,5 +300,4 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private void showSnackBar(String text) {
         Snackbar.make(fabLocation, text, Snackbar.LENGTH_LONG).show();
     }
-
 }
