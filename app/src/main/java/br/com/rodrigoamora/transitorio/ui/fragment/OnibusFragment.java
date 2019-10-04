@@ -119,18 +119,24 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void error() {
         mapFragment.getMapAsync(this);
+        cardViewProgressBar.setVisibility(View.GONE);
     }
 
     @Override
     public void success(List<Onibus> onibusList) {
+        cardViewProgressBar.setVisibility(View.GONE);
         if (onibusList.isEmpty()) {
             showSnackBar(getString(R.string.sem_resultado));
             Log.i(TAG_LOG, "Sem resultado");
+            this.onibusList = this.cacheManager.getCache(TAG_CACHE);
         } else {
             this.onibusList = onibusList;
             Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
             this.cacheManager.deleteCache(TAG_CACHE);
             this.cacheManager.saveCache(TAG_CACHE, this.onibusList);
+        }
+
+        if (this.cacheManager.getCache(TAG_CACHE) != null) {
             this.mapFragment.getMapAsync(this);
         }
     }
@@ -138,7 +144,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         CameraUpdate update;
-        
+
         if (onibusList != null && !onibusList.isEmpty()) {
             this.googleMap = googleMap;
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -177,7 +183,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         googleMap.setMyLocationEnabled(false);
         googleMap.setBuildingsEnabled(false);
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-        cardViewProgressBar.setVisibility(View.GONE);
     }
 
     private void configurarComponentes(View rootView) {
