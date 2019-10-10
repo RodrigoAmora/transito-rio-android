@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        PermissionUtil.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION});
+        checkPermissions();
         hideNavigationBar();
         navigationBarTransparent();
         changeFragment(new OnibusFragment(), null);
@@ -48,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void changeFragment(Fragment fragment, Bundle bundle) {
         FragmentUtil.changeFragment(R.id.container, fragment, getSupportFragmentManager(), false, bundle);
+    }
+
+    private void checkPermissions() {
+        PermissionUtil.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION});
     }
 
     private void hideNavigationBar() {
