@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import br.com.rodrigoamora.transitorio.R;
 import br.com.rodrigoamora.transitorio.ui.fragment.OnibusFragment;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         PermissionUtil.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION});
+        hideNavigationBar();
         changeFragment(new OnibusFragment(), null);
     }
 
@@ -44,4 +46,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentUtil.changeFragment(R.id.container, fragment, getSupportFragmentManager(), false, bundle);
     }
 
+    private void hideNavigationBar() {
+        View decorView = getWindow().getDecorView();
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        decorView.setSystemUiVisibility(uiOptions);
+    }
 }
