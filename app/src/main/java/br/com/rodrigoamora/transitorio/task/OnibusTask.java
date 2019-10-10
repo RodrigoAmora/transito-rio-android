@@ -78,6 +78,7 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
         return onibusLista;
     }
 

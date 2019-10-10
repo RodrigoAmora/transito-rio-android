@@ -6,8 +6,6 @@ import com.orhanobut.hawk.Hawk;
 
 public class MyApplication extends Application {
 
-    //private CacheManager cacheManager;
-
     @Override
     public void onCreate() {
         super.onCreate();
