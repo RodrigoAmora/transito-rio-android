@@ -35,7 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.rodrigoamora.transitorio.R;
-import br.com.rodrigoamora.transitorio.application.MyApplication;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
 import br.com.rodrigoamora.transitorio.manager.CacheManager;
 import br.com.rodrigoamora.transitorio.model.Onibus;
@@ -53,7 +52,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private OnibusTask onibusTask;
 
     private MainActivity activity;
-    private MyApplication myApplication;
 
     private CardView cardViewProgressBar;
     private FloatingActionButton fabLocation, fabRefresh;
@@ -74,7 +72,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
-        myApplication = (MyApplication) activity.getApplication();
         cacheManager = new CacheManager<>();
         buscarOnibus();
     }
@@ -99,6 +96,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 if (googleMap != null) {
                     limparMapa();
                 }
+
                 buscarOnibus();
                 break;
         }
@@ -126,12 +124,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     public void success(List<Onibus> onibusList) {
         cardViewProgressBar.setVisibility(View.GONE);
         if (onibusList.isEmpty()) {
-            showSnackBar(getString(R.string.sem_resultado));
             Log.i(TAG_LOG, "Sem resultado");
+
+            showSnackBar(getString(R.string.sem_resultado));
             this.onibusList = this.cacheManager.getCache(TAG_CACHE);
         } else {
-            this.onibusList = onibusList;
             Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
+
+            this.onibusList = onibusList;
             this.cacheManager.deleteCache(TAG_CACHE);
             this.cacheManager.saveCache(TAG_CACHE, this.onibusList);
         }
@@ -235,6 +235,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
     private void desenharCirculoNoMapa(Location myLocation, List<Onibus> onibusProximos) {
         Log.i(TAG_LOG, "Limpando mapa....");
+
         limparMapa();
 
         onibusList.clear();
