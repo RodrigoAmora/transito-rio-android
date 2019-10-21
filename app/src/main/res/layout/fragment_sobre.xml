@@ -10,6 +10,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:gravity="center_horizontal"
+            android:text="@string/created_by_rodrigo_amora"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:background="@android:color/black"
+            android:layout_width="match_parent"
+            android:layout_height="1dp" />
+
         <LinearLayout
             android:gravity="center_horizontal"
             android:layout_width="match_parent"
@@ -25,16 +36,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
-
-        <LinearLayout
-            android:background="@android:color/black"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
-
-        <TextView
-            android:text="@string/created_by_rodrigo_amora"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="horizontal"
