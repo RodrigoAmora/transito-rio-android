@@ -1,7 +1,8 @@
 package br.com.rodrigoamora.transitorio.util;
 
 import android.app.Activity;
-import android.support.v4.app.ActivityCompat;
+
+import androidx.core.app.ActivityCompat;
 
 public class PermissionUtil {
 
