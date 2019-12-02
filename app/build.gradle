@@ -51,14 +51,9 @@ dependencies {
     def androidx = '1.0.0'
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "com.google.android.material:material:$androidx"
-    //implementation "androidx.cardview:cardview:$androidx"
-    //implementation "androidx.recyclerview:recyclerview:$androidx"
-
-    //CONSTRAINT-LAYOUT
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
 
     //GOOGLE-PLAY-SERVICES
-    def googlePlayServicesVersion = '15.0.1'
+    def googlePlayServicesVersion = '17.0.0'
     implementation "com.google.android.gms:play-services-maps:$googlePlayServicesVersion"
     implementation "com.google.android.gms:play-services-location:$googlePlayServicesVersion"
 
