@@ -9,7 +9,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.rodrigoamora.transitorio.util.LogEnum;
 import br.com.rodrigoamora.transitorio.R;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
 import br.com.rodrigoamora.transitorio.manager.CacheManager;
@@ -42,6 +42,7 @@ import br.com.rodrigoamora.transitorio.model.Onibus;
 import br.com.rodrigoamora.transitorio.task.OnibusTask;
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
 import br.com.rodrigoamora.transitorio.util.GPSUtil;
+import br.com.rodrigoamora.transitorio.util.LogUtil;
 import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
 public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, OnMapReadyCallback, LocationListener, View.OnClickListener {
@@ -125,16 +126,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     public void success(List<Onibus> onibusList) {
         cardViewProgressBar.setVisibility(View.GONE);
         if (onibusList.isEmpty()) {
-            Log.i(TAG_LOG, "Sem resultado");
-
+            LogUtil.log(TAG_LOG, "Sem resultado", LogEnum.INFO);
             showSnackBar(getString(R.string.sem_resultado));
             this.onibusList = this.cacheManager.getCache(TAG_CACHE);
         } else {
             this.onibusList = onibusList;
             this.cacheManager.deleteCache(TAG_CACHE);
             this.cacheManager.saveCache(TAG_CACHE, this.onibusList);
-
-            Log.i(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size());
+            LogUtil.log(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size(), LogEnum.INFO);
         }
 
         if (this.cacheManager.getCache(TAG_CACHE) != null) {
@@ -199,14 +198,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void buscarOnibus() {
-        Log.i(TAG_LOG, "Verificando se tem internet....");
+        LogUtil.log(TAG_LOG, "Verificando se tem internet....", LogEnum.INFO);
         if (NetworkUtil.checkConnection(activity)) {
-            Log.e(TAG_LOG, "Tem internet....");
+            LogUtil.log(TAG_LOG, "Tem internet....", LogEnum.INFO);
             cardViewProgressBar.setVisibility(View.VISIBLE);
             onibusTask = new OnibusTask(this);
             onibusTask.execute();
         } else {
-            Log.i(TAG_LOG, "Nao tem internet....");
+            LogUtil.log(TAG_LOG, "Nao tem internet....", LogEnum.ERROR);
             showSnackBar(getString(R.string.alert_sem_internet));
             this.onibusList = (List<Onibus>) this.cacheManager.getCache(TAG_CACHE);
             this.mapFragment.getMapAsync(this);
@@ -214,8 +213,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void filtrarOnibusProximos() {
-        Log.i(TAG_LOG, "Filtrando onibus proximos....");
-
+        LogUtil.log(TAG_LOG, "Filtrando onibus proximos....", LogEnum.INFO);
         if (!onibusList.isEmpty()) {
             Location myLocation = getLocation(activity);
 
@@ -224,10 +222,10 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 verificarOnibusProximos(myLocation, onibusProximos);
 
                 if (onibusProximos.isEmpty()) {
-                    Log.i(TAG_LOG, "Sem onibus proximos");
+                    LogUtil.log(TAG_LOG, "Sem onibus proximos", LogEnum.INFO);
                     showSnackBar(getString(R.string.alert_sem_onibus_proximo));
                 } else {
-                    Log.i(TAG_LOG, "Total de onibus proximos: "+onibusProximos.size());
+                    LogUtil.log(TAG_LOG, "Total de onibus proximos: "+onibusProximos.size(), LogEnum.INFO);
                     desenharCirculoNoMapa(myLocation, onibusProximos);
                 }
             }
@@ -235,7 +233,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     }
 
     private void desenharCirculoNoMapa(Location myLocation, List<Onibus> onibusProximos) {
-        Log.i(TAG_LOG, "Limpando mapa....");
+        LogUtil.log(TAG_LOG, "Limpando mapa....", LogEnum.INFO);
 
         limparMapa();
 

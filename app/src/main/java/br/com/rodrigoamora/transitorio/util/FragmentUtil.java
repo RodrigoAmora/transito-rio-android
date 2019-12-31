@@ -22,5 +22,4 @@ public class FragmentUtil {
 
         transacao.commit();
     }
-
 }
