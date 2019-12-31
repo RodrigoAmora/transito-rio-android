@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkPermissions();
         hideNavigationBar();
-        //navigationBarTransparent();
         changeFragment(new OnibusFragment(), null);
     }
 

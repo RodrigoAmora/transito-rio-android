@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    //ANDROID-X
+    //ANDROID X
     def androidx = '1.0.0'
     implementation "androidx.appcompat:appcompat:1.1.0"
     implementation "com.google.android.material:material:$androidx"
