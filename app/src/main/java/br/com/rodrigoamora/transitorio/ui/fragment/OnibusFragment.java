@@ -98,7 +98,6 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 if (googleMap != null) {
                     limparMapa();
                 }
-
                 buscarOnibus();
                 break;
         }
