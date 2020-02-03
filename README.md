@@ -1,7 +1,7 @@
 # transito-rio-android
 Aplicativo Android que exibe a posição dos ônibus na cidade do Rio de Janeiro em um intervalo de cinco minutos. <br>
 O App roda a partir do Android 5.0 (API Level 21)<br>
-O projeto usa como depndência:
+O projeto usa como dependência:
 - Material Design;
 - Google Maps API;
 - Hawk;
