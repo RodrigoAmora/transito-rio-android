@@ -52,6 +52,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private String TAG_CACHE = "onibus_list";
     private String TAG_LOG = "TRANSITO_RIO";
 
+    private Boolean onibusProximos = false;
+
     private List<Onibus> onibusList;
     private OnibusTask onibusTask;
 
@@ -170,7 +172,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             }
 
             int size = onibusList.size();
-            LatLng latLng = new LatLng(onibusList.get(size-1).getLatidude(), onibusList.get(size - 1).getLongitude());
+            LatLng latLng;
+            if (onibusProximos) {
+                Location location = getLocation(activity);
+                latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            } else {
+                latLng = new LatLng(onibusList.get(size - 1).getLatidude(), onibusList.get(size - 1).getLongitude());
+            }
+
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         } else {
             LatLng latLng = new LatLng(-22.9076612, -43.1920286);
@@ -218,6 +227,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private void filtrarOnibusProximos() {
         LogUtil.log(TAG_LOG, "Filtrando onibus proximos....", LogEnum.INFO);
         if (!onibusList.isEmpty()) {
+            onibusProximos = true;
             Location myLocation = getLocation(activity);
 
             if (myLocation != null) {
