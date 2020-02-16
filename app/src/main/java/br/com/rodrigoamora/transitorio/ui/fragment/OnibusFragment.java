@@ -4,6 +4,8 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -34,7 +36,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.rodrigoamora.transitorio.util.LogEnum;
 import br.com.rodrigoamora.transitorio.R;
 import br.com.rodrigoamora.transitorio.delegate.Delegate;
 import br.com.rodrigoamora.transitorio.manager.CacheManager;
@@ -42,6 +43,7 @@ import br.com.rodrigoamora.transitorio.model.Onibus;
 import br.com.rodrigoamora.transitorio.task.OnibusTask;
 import br.com.rodrigoamora.transitorio.ui.activity.MainActivity;
 import br.com.rodrigoamora.transitorio.util.GPSUtil;
+import br.com.rodrigoamora.transitorio.util.LogEnum;
 import br.com.rodrigoamora.transitorio.util.LogUtil;
 import br.com.rodrigoamora.transitorio.util.NetworkUtil;
 
@@ -156,11 +158,13 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            googleMap.setMyLocationEnabled(true);
+
 
             for (Onibus onibus : onibusList) {
+                Bitmap icon = BitmapFactory.decodeResource(activity.getResources(), R.drawable.ic_bus);
                 LatLng latLng = new LatLng(onibus.getLatidude(), onibus.getLongitude());
                 googleMap.addMarker(new MarkerOptions()
+                        .icon(BitmapDescriptorFactory.fromBitmap(icon))
                         .title(onibus.getLinha()+" - "+onibus.getOrdem())
                         .position(latLng));
             }
@@ -248,9 +252,9 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         circleOptions.strokeWidth(2.0f);
         googleMap.addCircle(circleOptions);
 
-        MarkerOptions marker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
-        marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-        googleMap.addMarker(marker);
+        MarkerOptions devicePositionMarker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
+        devicePositionMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        googleMap.addMarker(devicePositionMarker);
 
         mapFragment.getMapAsync(this);
     }
