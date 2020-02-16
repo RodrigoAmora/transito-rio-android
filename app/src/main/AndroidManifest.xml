@@ -13,7 +13,7 @@
         android:required="true" />
 
     <permission
-        android:name="br.com.lazerrio.permission.MAPS_RECEIVE"
+        android:name="br.com.rodrigoamora.transitorio.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
 
     <application
