@@ -36,7 +36,7 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet get = new HttpGet(url);
-            get.addHeader("accept", "application/xml");
+            get.addHeader("accept", "application/json");
 
             HttpResponse getResponse = httpClient.execute(get);
             InputStream content = getResponse.getEntity().getContent();
@@ -44,7 +44,7 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
             Scanner scanner = new Scanner(content);
             String json = "";
             while(scanner.hasNextLine()) {
-                json = scanner.nextLine()+"\n";
+                json = scanner.nextLine();//+"\n";
             }
             content.close();
 
