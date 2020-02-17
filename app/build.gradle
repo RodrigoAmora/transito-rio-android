@@ -8,21 +8,23 @@ android {
         applicationId "br.com.rodrigoamora.transitorio"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 26
-        versionName "1.9"
+        versionCode 27
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
-        release {
-            debuggable false
+        debug {
+            debuggable true
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix ".debug"
             buildConfigField "String", "BASE_URL_ONIBUS_API", "\"http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/\""
         }
 
-        debug {
-            debuggable true
+        release {
+            debuggable false
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL_ONIBUS_API", "\"http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/\""
         }
     }
