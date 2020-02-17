@@ -207,6 +207,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         fabRefresh.setOnClickListener(this);
 
         mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map_fragment);
+        mapFragment.setHasOptionsMenu(false);
+        mapFragment.setMenuVisibility(false);
     }
 
     private void buscarOnibus() {
