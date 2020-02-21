@@ -8,8 +8,8 @@ android {
         applicationId "br.com.rodrigoamora.transitorio"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 27
-        versionName "2.0"
+        versionCode 28
+        versionName "2.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 
@@ -23,7 +23,7 @@ android {
 
         release {
             debuggable false
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "BASE_URL_ONIBUS_API", "\"http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/\""
         }
