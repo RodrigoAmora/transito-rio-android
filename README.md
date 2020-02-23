@@ -8,8 +8,6 @@ O projeto usa como dependência:
 - Material Design;
 - Google Maps API;
 - Hawk;
-
 <hr>
-
 Disponível em: <br>
 https://play.google.com/store/apps/details?id=br.com.rodrigoamora.transitorio
