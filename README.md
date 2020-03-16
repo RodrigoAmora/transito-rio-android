@@ -12,5 +12,4 @@ O projeto usa como dependência:
 <hr>
 
 Disponível em: <br>
-https://play.google.com/store/apps/details?id=br.com.rodrigoamora.transitorio
-~                                                                               
+https://play.google.com/store/apps/details?id=br.com.rodrigoamora.transitorio                                                                               
