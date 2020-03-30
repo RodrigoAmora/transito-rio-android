@@ -24,6 +24,7 @@ import br.com.rodrigoamora.transitorio.util.TimeUtil;
 public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
 
     private Delegate<List<Onibus>> delegate;
+    private List<Onibus> onibusLista;
 
     public OnibusTask(Delegate delegate) {
         this.delegate = delegate;
@@ -32,7 +33,7 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
     @Override
     protected List<Onibus> doInBackground(Void... voids) {
         String url = BuildConfig.BASE_URL_ONIBUS_API+"obterTodasPosicoes";
-        List<Onibus> onibusLista = new ArrayList();
+
         try {
             HttpClient httpClient = new DefaultHttpClient();
             HttpGet get = new HttpGet(url);
@@ -44,35 +45,14 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
             Scanner scanner = new Scanner(content);
             String json = "";
             while(scanner.hasNextLine()) {
-                json = scanner.nextLine();//+"\n";
+                json = scanner.nextLine();
             }
             content.close();
 
             JSONObject jsonObject = new JSONObject(json);
             JSONArray jsonArray = jsonObject.getJSONArray("DATA");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONArray jsonOnibus = jsonArray.getJSONArray(i);
-
-                String hora = jsonOnibus.get(0).toString().split(" ")[1];
-                if (TimeUtil.calculateTimeInMinutes(hora) <= 5) {
-                    Onibus onibus = new Onibus();
-                    onibus.setHora(hora);
-                    onibus.setOrdem(jsonOnibus.get(1).toString());
-
-                    String linha = jsonOnibus.get(2).toString();
-                    if (linha.contains(".0")) {
-                        linha = linha.replace(".0", "");
-                    }
-                    onibus.setLinha(linha.toString());
-
-                    onibus.setLatidude(Double.parseDouble(jsonOnibus.get(3).toString()));
-                    onibus.setLongitude(Double.parseDouble(jsonOnibus.get(4).toString()));
-                    onibus.setVelocidade(Double.parseDouble(jsonOnibus.get(5).toString()));
-
-                    onibusLista.add(onibus);
-                }
-            }
+            onibusLista = parserJson(jsonArray);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
@@ -92,4 +72,32 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
         }
     }
 
+    private List<Onibus> parserJson(JSONArray jsonArray) throws JSONException {
+        onibusLista = new ArrayList();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONArray jsonOnibus = jsonArray.getJSONArray(i);
+
+            String hora = jsonOnibus.get(0).toString().split(" ")[1];
+            if (TimeUtil.calculateTimeInMinutes(hora) <= 5) {
+                Onibus onibus = new Onibus();
+                onibus.setHora(hora);
+                onibus.setOrdem(jsonOnibus.get(1).toString());
+
+                String linha = jsonOnibus.get(2).toString();
+                if (linha.contains(".0")) {
+                    linha = linha.replace(".0", "");
+                }
+                onibus.setLinha(linha.toString());
+
+                onibus.setLatidude(Double.parseDouble(jsonOnibus.get(3).toString()));
+                onibus.setLongitude(Double.parseDouble(jsonOnibus.get(4).toString()));
+                onibus.setVelocidade(Double.parseDouble(jsonOnibus.get(5).toString()));
+
+                onibusLista.add(onibus);
+            }
+        }
+
+        return onibusLista;
+    }
 }
