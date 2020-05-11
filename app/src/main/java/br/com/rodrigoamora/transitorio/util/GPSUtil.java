@@ -4,7 +4,6 @@ import android.content.Context;
 import android.location.LocationManager;
 
 public class GPSUtil {
-
     public static boolean gpsIsEnable(Context context) {
         try {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
@@ -17,5 +16,4 @@ public class GPSUtil {
             return false;
         }
     }
-
 }
