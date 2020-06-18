@@ -63,14 +63,14 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
     private FloatingActionButton fabLocation, fabRefresh;
     private GoogleMap googleMap;
     private SupportMapFragment mapFragment;
+    View rootView;
 
     private CacheManager<List<Onibus>> cacheManager;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_onibus, container, false);
-        configurarComponentes(rootView);
+        rootView = inflater.inflate(R.layout.fragment_onibus, container, false);
         return rootView;
     }
 
@@ -79,6 +79,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         super.onActivityCreated(savedInstanceState);
         activity = (MainActivity) getActivity();
         cacheManager = new CacheManager<>();
+        configurarComponentes(rootView);
         buscarOnibus();
     }
 
@@ -175,7 +176,8 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         } else {
-            LatLng latLng = new LatLng(-22.9076612, -43.1920286);
+//            LatLng latLng = new LatLng(-22.9076612, -43.1920286);
+            LatLng latLng = new LatLng(0,0);
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
 
@@ -258,7 +260,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         googleMap.addCircle(circleOptions);
 
         MarkerOptions devicePositionMarker = new MarkerOptions().position(latLng).title(getString(R.string.voce_esta_aqui));
-        devicePositionMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+        devicePositionMarker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         googleMap.addMarker(devicePositionMarker);
 
         mapFragment.getMapAsync(this);

@@ -40,19 +40,24 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
             get.addHeader("accept", "application/json");
 
             HttpResponse getResponse = httpClient.execute(get);
-            InputStream content = getResponse.getEntity().getContent();
+            int c = getResponse.getStatusLine().getStatusCode();
+            if (getResponse != null) {
+                InputStream content = getResponse.getEntity().getContent();
 
-            Scanner scanner = new Scanner(content);
-            String json = "";
-            while(scanner.hasNextLine()) {
-                json = scanner.nextLine();
+                Scanner scanner = new Scanner(content);
+                String json = "";
+                while (scanner.hasNextLine()) {
+                    json = scanner.nextLine();
+                }
+                content.close();
+
+                JSONObject jsonObject = new JSONObject(json);
+                JSONArray jsonArray = jsonObject.getJSONArray("DATA");
+
+                onibusLista = parserJson(jsonArray);
+            } else {
+                return onibusLista;
             }
-            content.close();
-
-            JSONObject jsonObject = new JSONObject(json);
-            JSONArray jsonArray = jsonObject.getJSONArray("DATA");
-
-            onibusLista = parserJson(jsonArray);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
