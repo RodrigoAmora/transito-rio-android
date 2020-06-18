@@ -135,7 +135,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
             this.onibusList = this.cacheManager.getCache(TAG_CACHE);
         } else {
             this.onibusList = onibusList;
-            this.cacheManager.deleteCache(TAG_CACHE);
+            this.cacheManager.removeCache(TAG_CACHE);
             this.cacheManager.saveCache(TAG_CACHE, this.onibusList);
             LogUtil.log(TAG_LOG, "Total de onibus retornados: "+this.onibusList.size(), LogEnum.INFO);
         }
