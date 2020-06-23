@@ -176,8 +176,7 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
 
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         } else {
-//            LatLng latLng = new LatLng(-22.9076612, -43.1920286);
-            LatLng latLng = new LatLng(0,0);
+            LatLng latLng = new LatLng(-22.9076612, -43.1920286);
             update = CameraUpdateFactory.newLatLngZoom(latLng, 15);
         }
 
@@ -253,9 +252,9 @@ public class OnibusFragment extends Fragment implements Delegate<List<Onibus>>, 
         LatLng latLng = new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
-        circleOptions.fillColor(R.color.colorPrimary);
+        circleOptions.fillColor(R.color.colorPrimaryDark);
         circleOptions.radius(1500);
-        circleOptions.strokeColor(Color.BLUE);
+        circleOptions.strokeColor(Color.GREEN);
         circleOptions.strokeWidth(2.0f);
         googleMap.addCircle(circleOptions);
 
