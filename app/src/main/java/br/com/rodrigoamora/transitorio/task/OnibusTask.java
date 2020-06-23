@@ -40,7 +40,6 @@ public class OnibusTask extends AsyncTask<Void, List<Onibus>, List<Onibus>> {
             get.addHeader("accept", "application/json");
 
             HttpResponse getResponse = httpClient.execute(get);
-            int c = getResponse.getStatusLine().getStatusCode();
             if (getResponse != null) {
                 InputStream content = getResponse.getEntity().getContent();
 
